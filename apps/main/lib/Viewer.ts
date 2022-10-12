@@ -1,7 +1,9 @@
-import {Deck, DeckProps} from '@deck.gl/core';
+import {Deck, DeckProps, MapViewState, MapView} from '@deck.gl/core';
+import {GeoJsonLayer} from '@deck.gl/layers';
 import {Feature} from 'geojson';
 import maplibreGl from 'maplibre-gl';
 import MaplibreWrapper from './MaplibreWrapper';
+import aveiroData from '../data/aveiro.json';
 
 const internalProps = {
   debug: false,
@@ -52,7 +54,50 @@ class Viewer {
     if (!this.deck) {
       return;
     }
-    this.deck.setProps({});
+    this.deck.setProps({
+      parameters: {
+        clearColor: [250, 250, 250, 1],
+      },
+      useDevicePixels: true,
+      views: [
+        new MapView({
+          id: 'main',
+          controller: true,
+          longitude: 8.6538,
+          latitude: 40.6405,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        }),
+      ],
+      defaultViewState: {
+        longitude: 8.6538,
+        latitude: 40.6405,
+      },
+      viewState: {
+        main: {
+          longitude: 8.6538,
+          latitude: 40.6405,
+        },
+      },
+      layers: [
+        new GeoJsonLayer({
+          id: 'geojson-layer',
+          data: aveiroData,
+          pickable: true,
+          stroked: false,
+          filled: true,
+          extruded: true,
+          pointType: 'circle',
+          lineWidthScale: 20,
+          lineWidthMinPixels: 2,
+          getFillColor: [160, 160, 180, 200],
+          getLineColor: [160, 160, 160, 200],
+          getPointRadius: 100,
+          getLineWidth: 1,
+          getElevation: 30,
+        }),
+      ],
+    });
   }
 
   private maplibre(props) {

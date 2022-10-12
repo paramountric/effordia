@@ -12,7 +12,7 @@ export const useViewer = (): {
     if (!viewer) {
       return;
     }
-    viewer.setProps({});
+    viewer.render();
   };
 
   useEffect(() => {
