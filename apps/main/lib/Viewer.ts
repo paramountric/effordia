@@ -1,7 +1,7 @@
 import {Deck, DeckProps, MapViewState, MapView} from '@deck.gl/core';
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {Feature} from 'geojson';
-import maplibreGl from 'maplibre-gl';
+import maplibreGl, {Texture} from 'maplibre-gl';
 import MaplibreWrapper from './MaplibreWrapper';
 import aveiroData from '../data/aveiro.json';
 
@@ -12,9 +12,6 @@ const internalProps = {
     depth: true,
   },
   layers: [],
-  // onWebGLInitialized: null,
-  // onViewStateChange: null,
-  // layerFilter: null,
 };
 
 type ViewerProps = DeckProps & {
@@ -55,36 +52,44 @@ class Viewer {
       return;
     }
     this.deck.setProps({
-      parameters: {
-        clearColor: [250, 250, 250, 1],
-      },
-      useDevicePixels: true,
-      views: [
-        new MapView({
-          id: 'main',
-          controller: true,
-          longitude: 8.6538,
-          latitude: 40.6405,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        }),
-      ],
-      defaultViewState: {
-        longitude: 8.6538,
-        latitude: 40.6405,
-      },
-      viewState: {
-        main: {
-          longitude: 8.6538,
-          latitude: 40.6405,
-        },
-      },
+      // parameters: {
+      //   clearColor: [250, 250, 250, 1],
+      // },
+      // useDevicePixels: true,
+      // views: [
+      //   new MapView({
+      //     id: 'main',
+      //     controller: true,
+      //     longitude: 8.6538,
+      //     latitude: 40.6405,
+      //     width: window.innerWidth,
+      //     height: window.innerHeight,
+      //   }),
+      // ],
+      // viewState: {
+      //   main: {
+      //     longitude: 8.6538,
+      //     latitude: 40.6405,
+      //   },
+      // },
+      // layerFilter: ({layer, viewport}) => {
+      //   return true;
+      // },
+      // onViewStateChange: ({
+      //   viewState,
+      //   viewId,
+      //   interactionState,
+      //   oldViewState,
+      // }) => {
+      //   console.log(viewState);
+      //   return viewState;
+      // },
       layers: [
         new GeoJsonLayer({
           id: 'geojson-layer',
           data: aveiroData,
           pickable: true,
-          stroked: false,
+          stroked: true,
           filled: true,
           extruded: true,
           pointType: 'circle',
@@ -113,7 +118,7 @@ class Viewer {
             id: 'background',
             type: 'background',
             paint: {
-              'background-color': 'rgba(255, 255, 255, 1)',
+              'background-color': 'rgba(250, 250, 250, 1)',
             },
           },
         ],
@@ -124,7 +129,7 @@ class Viewer {
       zoom: props.zoom || 14, // starting zoom
       minZoom: props.minZoom || 10,
       pitch: props.pitch || 60,
-      attributionControl: false,
+      attributionControl: true,
     } as maplibregl.MapOptions;
     if (props.container) {
       maplibreOptions.container = props.container;
@@ -136,7 +141,6 @@ class Viewer {
       container.style.position = 'absolute';
       container.style.top = '0px';
       container.style.left = '0px';
-      container.style.background = '#100';
       document.body.appendChild(container);
       props.container = container;
     }

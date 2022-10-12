@@ -1,4 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
+import {StylePropertySpecification} from 'maplibre-gl';
+
 import {Viewer} from '../lib/Viewer';
 
 export const useViewer = (): {
@@ -8,15 +10,10 @@ export const useViewer = (): {
 } => {
   const [viewer, setViewer] = useState<Viewer | null>(null);
 
-  const render = () => {
-    if (!viewer) {
-      return;
-    }
-    viewer.render();
-  };
-
   useEffect(() => {
-    render();
+    if (viewer) {
+      viewer.render();
+    }
   }, [viewer]);
 
   return {
@@ -32,6 +29,9 @@ export const useViewer = (): {
       setViewer(
         new Viewer({
           container: ref,
+          longitude: -8.6538,
+          latitude: 40.6405,
+          zoom: 12,
         })
       );
     },
