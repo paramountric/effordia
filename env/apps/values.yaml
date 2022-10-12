@@ -7,4 +7,4 @@ imageMain: ghcr.io/paramountric/effordia-main
 imagePullPolicy: IfNotPresent
 enableIngressTls: Disable
 tlsSecretName: 'aws-lb-tls-is-use-so-this-is-skipped'
-ingressClassName: public
+ingressClassName: nginx
