@@ -121,4 +121,5 @@ class Viewer {
   }
 }
 
-export {Viewer, ViewerProps};
+export {Viewer};
+export type {ViewerProps};
