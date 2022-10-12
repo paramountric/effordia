@@ -5,14 +5,14 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   labels:
-    app.kubernetes.io/name: pmtric-staging
-  name: pmtric-staging
+    app.kubernetes.io/name: effordia-staging
+  name: effordia-staging
   namespace: argocd
 spec:
-  project: pmtric-staging
+  project: effordia-staging
   source:
     path: env/apps
-    repoURL: https://github.com/paramountric/pmtric-platform-env.git
+    repoURL: https://github.com/paramountric/effordia.git
     targetRevision: main
     helm:
       valueFiles:

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dod-app-ingress-dev
+  name: main-app-ingress
   namespace: {{ .Values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'false'
@@ -17,13 +17,13 @@ spec:
 {{- end }}
   ingressClassName: {{ .Values.ingressClassName }}
   rules:
-    - host: {{ .Values.domain | default "dod.pmtric.com" }}
+    - host: {{ .Values.domain | default "effordia.com" }}
       http:
         paths:
           - path: '/'
             pathType: Prefix
             backend:
               service:
-                name: dod-app
+                name: main-app
                 port:
                   number: 3000
