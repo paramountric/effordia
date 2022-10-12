@@ -3,7 +3,7 @@ namespace: effordia-staging
 domain: effordia.com
 protocol: http
 imageHub: ghcr.io/paramountric/effordia-hub
-imageMain: ghcr.io/paramountric/apps-main:7659b6b596a619077b24e2f78f4ef20ed5bca9bb
+imageMain: ghcr.io/paramountric/apps-main:71bde53e095a8b9fb148ad3fdb2ac2ab7e08d0c0
 imagePullPolicy: Always
 enableIngressTls: Disable
 tlsSecretName: 'aws-lb-tls-is-use-so-this-is-skipped'
