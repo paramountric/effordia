@@ -1,9 +1,30 @@
 import {Deck, DeckProps, MapViewState, MapView} from '@deck.gl/core';
 import {GeoJsonLayer} from '@deck.gl/layers';
-import {Feature} from 'geojson';
+import {Feature, FeatureCollection} from 'geojson';
 import maplibreGl, {Texture} from 'maplibre-gl';
 import MaplibreWrapper from './MaplibreWrapper';
-import aveiroData from '../data/aveiro.json';
+import rawAveiroData from '../data/aveiro.json';
+
+const aveiroData: any = rawAveiroData;
+// changing strategy to include instead of exclude
+// const excludeIds = [
+//   'relation/9920030',
+//   'relation/6021694',
+//   'relation/4008240',
+//   'relation/3870917',
+//   'relation/3920249',
+//   'relation/5321486',
+//   'relation/5400968',
+//   'relation/5400979',
+//   'relation/9868597',
+// ];
+//const excludeTypes = ['Boundary'];
+const preparedAveiroData = [];
+for (const feature of aveiroData.features) {
+  if (feature.properties.type === 'Route') {
+    preparedAveiroData.push(feature);
+  }
+}
 
 const internalProps = {
   debug: false,
@@ -87,7 +108,16 @@ class Viewer {
       layers: [
         new GeoJsonLayer({
           id: 'geojson-layer',
-          data: aveiroData,
+          data: preparedAveiroData,
+          onClick: (d: any) => {
+            if (d.object) {
+              if (!d.object.id) {
+                d.object.id = d.object.properties.uuid;
+              }
+              console.log(d.object.id);
+              return;
+            }
+          },
           pickable: true,
           stroked: true,
           filled: true,
