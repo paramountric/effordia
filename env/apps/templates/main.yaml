@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: {{.Values.namespace}}
   source:
-    path: apps/main
+    path: config/apps/main
     repoURL: https://github.com/paramountric/effordia.git
     targetRevision: main
     helm:
