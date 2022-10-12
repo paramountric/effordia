@@ -59,10 +59,6 @@ COPY --from=builder /app/public ./public
 # COPY --from=builder /app/package.json ./package.json
 COPY entrypoint.sh .
 COPY .env.production .
-# Execute script
-RUN apk add --no-cache --upgrade bash
-RUN ["chmod", "+x", "./entrypoint.sh"]
-ENTRYPOINT ["./entrypoint.sh"]
 
 # Automatically leverage output traces to reduce image size 
 # https://nextjs.org/docs/advanced-features/output-file-tracing
