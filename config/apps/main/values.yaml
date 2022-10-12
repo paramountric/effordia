@@ -1,0 +1,10 @@
+domain: effordia-local.com
+namespace: effordia-development
+server: https://kubernetes.default.svc
+image: ghcr.io/paramountric/effordia-main
+imagePullPolicy: IfNotPresent
+enableIngressTls: true
+tlsSecretName: effordia-test-tls
+ingressClassName: public
+speckleServerUrl: https://speckle.effordia.com
+speckleAppId: 65098b5179

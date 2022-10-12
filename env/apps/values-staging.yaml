@@ -1,0 +1,10 @@
+environment: staging
+namespace: effordia-staging
+domain: effordia.com
+protocol: http
+imageHub: ghcr.io/paramountric/effordia-hub
+imageMain: ghcr.io/paramountric/effordia-main
+imagePullPolicy: Always
+enableIngressTls: Disable
+tlsSecretName: 'aws-lb-tls-is-use-so-this-is-skipped'
+ingressClassName: nginx

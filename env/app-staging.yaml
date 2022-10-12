@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimpstamp: null
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: pmtric-staging
+  name: pmtric-staging
+  namespace: argocd
+spec:
+  project: pmtric-staging
+  source:
+    path: env/apps
+    repoURL: https://github.com/paramountric/pmtric-platform-env.git
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values-staging.yaml
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+    - jsonPointers:
+        - /status
+      kind: Application
+  
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - allowEmpty=true
+      - CreateNamespace=true

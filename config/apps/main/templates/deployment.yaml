@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dod-app
+  namespace: {{.Values.namespace}}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      component: dod-app
+  template:
+    metadata:
+      labels:
+        component: dod-app
+    spec:
+      containers:
+        - name: dod-app
+          image: {{.Values.image}}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SPECKLE_SERVER_URL
+              value: {{ .Values.speckleServerUrl }}
+            - name: SPECKLE_APP_ID
+              value: {{ .Values.speckleAppId }}
+          envFrom:
+            - secretRef:
+                name: 'platform-secrets'
+          imagePullPolicy: {{.Values.imagePullPolicy}}
+      imagePullSecrets:
+        - name: regcred
+      

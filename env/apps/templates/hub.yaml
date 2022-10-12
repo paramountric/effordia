@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: {{.Values.namespace}}
+    server: https://kubernetes.default.svc
+  project: {{.Values.namespace}}
+  source:
+    path: services/hub
+    repoURL: https://github.com/paramountric/effordia.git
+    targetRevision: main
+    helm:
+      parameters:
+        - name: 'domain'
+          value: {{.Values.domain}}
+        - name: 'namespace'
+          value: {{.Values.namespace}}
+        - name: image
+          value: {{.Values.imageHub}}
+        - name: imagePullPolicy
+          value: {{.Values.imagePullPolicy}}
+        - name: enableIngressTls
+          value: {{.Values.enableIngressTls}}
+        - name: tlsSecretName
+          value: {{.Values.tlsSecretName}}
+      values: |
+        server: https://kubernetes.default.svc
+        ingress:
+          enabled: {{ .Values.enableIngressTls }}
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - allowEmpty=true
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
