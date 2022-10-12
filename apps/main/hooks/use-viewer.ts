@@ -30,12 +30,9 @@ export const useViewer = (): {
       ref.style.top = '0px';
       ref.style.left = '0px';
       setViewer(
-        new Viewer(
-          {
-            container: ref,
-          },
-          {}
-        )
+        new Viewer({
+          container: ref,
+        })
       );
     },
     viewer,
