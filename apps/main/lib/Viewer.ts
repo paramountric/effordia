@@ -6,19 +6,6 @@ import MaplibreWrapper from './MaplibreWrapper';
 import rawAveiroData from '../data/aveiro.json';
 
 const aveiroData: any = rawAveiroData;
-// changing strategy to include instead of exclude
-// const excludeIds = [
-//   'relation/9920030',
-//   'relation/6021694',
-//   'relation/4008240',
-//   'relation/3870917',
-//   'relation/3920249',
-//   'relation/5321486',
-//   'relation/5400968',
-//   'relation/5400979',
-//   'relation/9868597',
-// ];
-//const excludeTypes = ['Boundary'];
 const preparedAveiroOverlay = [];
 const preparedAveiroFoundation = [];
 for (const feature of aveiroData.features) {
