@@ -1,8 +1,8 @@
-name: apps-main
+name: mtf-apps-main
 
 env:
   ENV_REPO: pmtric-platform-env
-  IMAGE_NAME: apps-main
+  IMAGE_NAME: mtf-main
 
 on:
   push:
