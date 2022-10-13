@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
 import {Viewer} from '../lib/Viewer';
-import io from 'Socket.IO-client';
+import {io} from 'socket.io-client';
 let socket;
 
 export const useViewer = (): {
