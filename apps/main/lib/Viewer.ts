@@ -8,14 +8,28 @@ import rawAveiroData from '../data/aveiro.json';
 const aveiroData: any = rawAveiroData;
 const preparedAveiroOverlay = [];
 const preparedAveiroFoundation = [];
+const ids = {
+  water: 1,
+  building: 1,
+  farmland: 1,
+  industrial: 1,
+};
 for (const feature of aveiroData.features) {
   if (feature.properties.natural === 'water') {
+    feature.properties.aid = ids.water;
+    ids.water++;
     preparedAveiroOverlay.push(feature);
   } else if (feature.properties.building) {
+    feature.properties.aid = ids.building;
+    ids.building++;
     preparedAveiroOverlay.push(feature);
   } else if (feature.properties.landuse === 'farmland') {
+    feature.properties.aid = ids.farmland;
+    ids.farmland++;
     preparedAveiroOverlay.push(feature);
   } else if (feature.properties.landuse === 'industrial') {
+    feature.properties.aid = ids.industrial;
+    ids.industrial++;
     preparedAveiroOverlay.push(feature);
   } else if (feature.properties.type === 'boundary') {
     preparedAveiroFoundation.push(feature);
@@ -115,7 +129,7 @@ class Viewer {
           lineWidthScale: 1,
           lineWidthMinPixels: 1,
           getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
-          getLineColor: [80, 80, 80, 200],
+          getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,
           getElevation: 30,
@@ -140,7 +154,7 @@ class Viewer {
           lineWidthScale: 1,
           lineWidthMinPixels: 1,
           getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
-          getLineColor: [80, 80, 80, 200],
+          getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,
           getElevation: 30,
@@ -162,7 +176,7 @@ class Viewer {
             id: 'background',
             type: 'background',
             paint: {
-              'background-color': 'rgba(250, 250, 250, 1)',
+              'background-color': 'rgba(0, 0, 0, 255)',
             },
           },
         ],
