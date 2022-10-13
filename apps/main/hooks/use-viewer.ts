@@ -1,6 +1,8 @@
 import {useState, useEffect, useCallback} from 'react';
 import {Viewer} from '../lib/Viewer';
 import {io} from 'socket.io-client';
+import {useSelectedFeature} from '../hooks/selected-feature';
+
 let socket;
 
 export const useViewer = (): {
@@ -9,6 +11,7 @@ export const useViewer = (): {
   isLoading: boolean;
 } => {
   const [viewer, setViewer] = useState<Viewer | null>(null);
+  const {actions} = useSelectedFeature();
 
   useEffect(() => {
     if (viewer) {
@@ -58,6 +61,9 @@ export const useViewer = (): {
           longitude: -8.6538,
           latitude: 40.6405,
           zoom: 12,
+          onSelectObject: (obj: any) => {
+            actions.setFeatureId(obj.properties.aid);
+          },
         })
       );
     },

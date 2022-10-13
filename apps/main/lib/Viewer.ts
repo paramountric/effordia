@@ -78,6 +78,10 @@ class Viewer {
     }
   }
 
+  play() {
+    console.log('play');
+  }
+
   setData(data: any) {
     if (
       preparedAveiroOverlay[data.id] &&
@@ -197,7 +201,7 @@ class Viewer {
           pointType: 'circle',
           lineWidthScale: 1,
           lineWidthMinPixels: 1,
-          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
+          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 0],
           getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,
@@ -207,10 +211,10 @@ class Viewer {
           data: Object.values(preparedAveiroOverlay),
           onClick: (d: any) => {
             if (d.object) {
-              if (!d.object.id) {
-                d.object.id = d.object.properties.uuid;
+              console.log(d);
+              if (d.object.properties.aid) {
+                this.setSelectedObject(d.object);
               }
-              console.log(d.object.id);
               return;
             }
           },
@@ -263,15 +267,15 @@ class Viewer {
       zoom: props.zoom || 14, // starting zoom
       minZoom: props.minZoom || 10,
       pitch: props.pitch || 60,
-      attributionControl: true,
+      attributionControl: false,
     } as maplibregl.MapOptions;
     if (props.container) {
       maplibreOptions.container = props.container;
     } else {
       const container = document.createElement('div');
       container.setAttribute('id', 'canvas');
-      container.style.width = '100%'; //window.innerWidth;
-      container.style.height = '100%'; //window.innerHeight;
+      container.style.width = `${window.innerWidth}px`;
+      container.style.height = `${window.innerHeight}px`;
       container.style.position = 'absolute';
       container.style.top = '0px';
       container.style.left = '0px';
