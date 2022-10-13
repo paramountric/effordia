@@ -46,6 +46,6 @@ jobs:
           echo "checkout main branch"
           git checkout main
           echo "updating image tag in values file"
-          sed -i "s,imageMft:.*,imageMft:\ $IMAGE_ID:${{ github.sha }}," env/apps/values-staging.yaml
+          sed -i "s,imageMtf:.*,imageMtf:\ $IMAGE_ID:${{ github.sha }}," env/apps/values-staging.yaml
           git add . && git commit -m "update image tag"
           git push
