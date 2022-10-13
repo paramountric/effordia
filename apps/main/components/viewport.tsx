@@ -32,8 +32,11 @@ const Viewport: React.FC<ViewportProps> = () => {
       {!playing && (
         <div className="z-50 absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
           <div className="bg-gray-900/75 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-96">
-            <h1 className="text-xl">Aveiro - play the value supply chain.</h1>
-            <h1>Water. Fish. Salt. Market. People. Circularity</h1>
+            <h1 className="text-xl">Aveiro - play a value supply chain.</h1>
+            <h1>
+              Water. Fish. Salt. Market. People. Materials. Innovation.
+              Circularity. Ecosystem living
+            </h1>
           </div>
           <div className="bg-gray-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
             <h1>How does it work:</h1>
