@@ -19,10 +19,21 @@ const aveiroData: any = rawAveiroData;
 //   'relation/9868597',
 // ];
 //const excludeTypes = ['Boundary'];
-const preparedAveiroData = [];
+const preparedAveiroOverlay = [];
+const preparedAveiroFoundation = [];
 for (const feature of aveiroData.features) {
-  if (feature.properties.type === 'Route') {
-    preparedAveiroData.push(feature);
+  if (feature.properties.natural === 'water') {
+    preparedAveiroOverlay.push(feature);
+  } else if (feature.properties.building) {
+    preparedAveiroOverlay.push(feature);
+  } else if (feature.properties.landuse === 'farmland') {
+    preparedAveiroOverlay.push(feature);
+  } else if (feature.properties.landuse === 'industrial') {
+    preparedAveiroOverlay.push(feature);
+  } else if (feature.properties.type === 'boundary') {
+    preparedAveiroFoundation.push(feature);
+  } else {
+    preparedAveiroFoundation.push(feature);
   }
 }
 
@@ -107,8 +118,24 @@ class Viewer {
       // },
       layers: [
         new GeoJsonLayer({
-          id: 'geojson-layer',
-          data: preparedAveiroData,
+          id: 'foundation',
+          data: preparedAveiroFoundation,
+          pickable: true,
+          stroked: true,
+          filled: false,
+          extruded: false,
+          pointType: 'circle',
+          lineWidthScale: 1,
+          lineWidthMinPixels: 1,
+          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
+          getLineColor: [80, 80, 80, 200],
+          getPointRadius: 10,
+          getLineWidth: 1,
+          getElevation: 30,
+        }),
+        new GeoJsonLayer({
+          id: 'overlay',
+          data: preparedAveiroOverlay,
           onClick: (d: any) => {
             if (d.object) {
               if (!d.object.id) {
@@ -121,13 +148,13 @@ class Viewer {
           pickable: true,
           stroked: true,
           filled: true,
-          extruded: true,
+          extruded: false,
           pointType: 'circle',
-          lineWidthScale: 20,
-          lineWidthMinPixels: 2,
-          getFillColor: [160, 160, 180, 200],
-          getLineColor: [160, 160, 160, 200],
-          getPointRadius: 100,
+          lineWidthScale: 1,
+          lineWidthMinPixels: 1,
+          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
+          getLineColor: [80, 80, 80, 200],
+          getPointRadius: 10,
           getLineWidth: 1,
           getElevation: 30,
         }),
