@@ -1,7 +1,7 @@
 import {useState, useEffect, useCallback} from 'react';
-import {StylePropertySpecification} from 'maplibre-gl';
-
 import {Viewer} from '../lib/Viewer';
+import io from 'Socket.IO-client';
+let socket;
 
 export const useViewer = (): {
   initViewer: (ref: HTMLElement) => void;
@@ -13,6 +13,32 @@ export const useViewer = (): {
   useEffect(() => {
     if (viewer) {
       viewer.render();
+    }
+  }, [viewer]);
+
+  useEffect(() => {
+    if (viewer) {
+      const connectWs = async () => {
+        await fetch('/api/ws');
+        socket = io();
+
+        socket.on('connect', () => {
+          console.log('connected to ws');
+        });
+
+        socket.on('set-data', msg => {
+          console.log(msg);
+          console.log('update');
+          if (viewer) {
+            viewer.setData(msg);
+          }
+        });
+      };
+
+      connectWs();
+      return () => {
+        // for unmounting
+      };
     }
   }, [viewer]);
 

@@ -1,12 +1,12 @@
 import {Deck, DeckProps, MapViewState, MapView} from '@deck.gl/core';
-import {GeoJsonLayer} from '@deck.gl/layers';
+import {GeoJsonLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {Feature, FeatureCollection} from 'geojson';
 import maplibreGl, {Texture} from 'maplibre-gl';
 import MaplibreWrapper from './MaplibreWrapper';
 import rawAveiroData from '../data/aveiro.json';
 
 const aveiroData: any = rawAveiroData;
-const preparedAveiroOverlay = [];
+const preparedAveiroOverlay = {};
 const preparedAveiroFoundation = [];
 const ids = {
   water: 1,
@@ -14,27 +14,30 @@ const ids = {
   farmland: 1,
   industrial: 1,
 };
+let updateColors = Date.now();
+let updateElevation = Date.now();
+
 for (const feature of aveiroData.features) {
   if (feature.properties.natural === 'water') {
-    feature.properties.aid = ids.water;
+    feature.properties.aid = `water-${ids.water}`;
     ids.water++;
-    preparedAveiroOverlay.push(feature);
+    preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.building) {
-    feature.properties.aid = ids.building;
+    feature.properties.aid = `building-${ids.building}`;
     ids.building++;
-    preparedAveiroOverlay.push(feature);
+    preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.landuse === 'farmland') {
-    feature.properties.aid = ids.farmland;
+    feature.properties.aid = `farmland-${ids.farmland}`;
     ids.farmland++;
-    preparedAveiroOverlay.push(feature);
+    preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.landuse === 'industrial') {
-    feature.properties.aid = ids.industrial;
+    feature.properties.aid = `industrial-${ids.industrial}`;
     ids.industrial++;
-    preparedAveiroOverlay.push(feature);
+    preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.type === 'boundary') {
-    preparedAveiroFoundation.push(feature);
+    //preparedAveiroFoundation.push(feature);
   } else {
-    preparedAveiroFoundation.push(feature);
+    //preparedAveiroFoundation.push(feature);
   }
 }
 
@@ -72,6 +75,56 @@ class Viewer {
     this.selectedObject = object;
     if (this.props.onSelectObject) {
       this.props.onSelectObject(object);
+    }
+  }
+
+  setData(data: any) {
+    if (
+      preparedAveiroOverlay[data.id] &&
+      preparedAveiroOverlay[data.id].properties
+    ) {
+      let doRender = false;
+      if (data.red) {
+        console.log('set red', data.red);
+        const color = preparedAveiroOverlay[data.id].properties.color || [
+          255, 255, 255, 150,
+        ];
+        color[0] = data.red;
+        preparedAveiroOverlay[data.id].properties.color = color;
+        updateColors = Date.now();
+        doRender = true;
+      }
+      if (data.green) {
+        const color = preparedAveiroOverlay[data.id].properties.color || [
+          255, 255, 255, 150,
+        ];
+        color[1] = data.green;
+        preparedAveiroOverlay[data.id].properties.color = color;
+        updateColors = Date.now();
+        doRender = true;
+      }
+      if (data.blue) {
+        const color = preparedAveiroOverlay[data.id].properties.color || [
+          255, 255, 255, 150,
+        ];
+        color[2] = data.blue;
+        preparedAveiroOverlay[data.id].properties.color = color;
+        updateColors = Date.now();
+        doRender = true;
+      }
+      if (data.elevation) {
+        console.log('set heigh', data.elevation);
+        preparedAveiroOverlay[data.id].properties.elevation = Number(
+          data.elevation
+        );
+        doRender = true;
+        updateElevation = Date.now();
+      }
+      if (doRender) {
+        this.render();
+      }
+    } else {
+      console.log('not found', data);
     }
   }
 
@@ -118,6 +171,22 @@ class Viewer {
       //   return viewState;
       // },
       layers: [
+        // new ScatterplotLayer({
+        //   id: 'background-circle',
+        //   data: {},
+        //   pickable: true,
+        //   opacity: 0.8,
+        //   stroked: true,
+        //   filled: true,
+        //   radiusScale: 6,
+        //   radiusMinPixels: 1,
+        //   radiusMaxPixels: 100,
+        //   lineWidthMinPixels: 1,
+        //   getPosition: d => d.coordinates,
+        //   getRadius: d => Math.sqrt(d.exits),
+        //   getFillColor: d => [255, 140, 0],
+        //   getLineColor: d => [0, 0, 0],
+        // }),
         new GeoJsonLayer({
           id: 'foundation',
           data: preparedAveiroFoundation,
@@ -132,11 +201,10 @@ class Viewer {
           getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,
-          getElevation: 30,
         }),
         new GeoJsonLayer({
           id: 'overlay',
-          data: preparedAveiroOverlay,
+          data: Object.values(preparedAveiroOverlay),
           onClick: (d: any) => {
             if (d.object) {
               if (!d.object.id) {
@@ -149,15 +217,19 @@ class Viewer {
           pickable: true,
           stroked: true,
           filled: true,
-          extruded: false,
+          extruded: true,
           pointType: 'circle',
           lineWidthScale: 1,
           lineWidthMinPixels: 1,
-          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
+          getFillColor: (d: any) => d.properties.color || [255, 255, 255, 100],
           getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,
-          getElevation: 30,
+          getElevation: (d: any) => d.properties.elevation || 0,
+          updateTriggers: {
+            getFillColor: updateColors,
+            getElevation: updateElevation,
+          },
         }),
       ],
     });
