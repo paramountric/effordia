@@ -35,7 +35,7 @@ for (const feature of aveiroData.features) {
     ids.industrial++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.type === 'boundary') {
-    //preparedAveiroFoundation.push(feature);
+    preparedAveiroFoundation.push(feature);
   } else {
     //preparedAveiroFoundation.push(feature);
   }
@@ -201,7 +201,6 @@ class Viewer {
           pointType: 'circle',
           lineWidthScale: 1,
           lineWidthMinPixels: 1,
-          getFillColor: (d: any) => d.properties.color || [160, 160, 180, 0],
           getLineColor: [255, 255, 255, 200],
           getPointRadius: 10,
           getLineWidth: 1,

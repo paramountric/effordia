@@ -79,9 +79,9 @@ const Viewport: React.FC<ViewportProps> = () => {
         </div>
       )}
       {selectedFeatureId && (
-        <div className="z-50 absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
-          <div className="bg-gray-900/75 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-96">
-            <h1 className="text-xl mb-3">Selected map object ID:</h1>
+        <div className="z-50 absolute top-4 right-4 border border-white text-white">
+          <div className="bg-gray-900/75 text-center m-auto items-center justify-center w-96">
+            <h1 className="text-xl">Selected map object ID:</h1>
             <h1 className="text-red-800">{selectedFeatureId}</h1>
             <button
               onClick={deselect}
