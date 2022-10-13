@@ -89,7 +89,7 @@ class Viewer {
         const color = preparedAveiroOverlay[data.id].properties.color || [
           255, 255, 255, 150,
         ];
-        color[0] = data.red;
+        color[0] = Number(data.red);
         preparedAveiroOverlay[data.id].properties.color = color;
         updateColors = Date.now();
         doRender = true;
@@ -98,7 +98,7 @@ class Viewer {
         const color = preparedAveiroOverlay[data.id].properties.color || [
           255, 255, 255, 150,
         ];
-        color[1] = data.green;
+        color[1] = Number(data.green);
         preparedAveiroOverlay[data.id].properties.color = color;
         updateColors = Date.now();
         doRender = true;
@@ -107,13 +107,13 @@ class Viewer {
         const color = preparedAveiroOverlay[data.id].properties.color || [
           255, 255, 255, 150,
         ];
-        color[2] = data.blue;
+        color[2] = Number(data.blue);
         preparedAveiroOverlay[data.id].properties.color = color;
         updateColors = Date.now();
         doRender = true;
       }
       if (data.elevation) {
-        console.log('set heigh', data.elevation);
+        console.log('set height', data.elevation);
         preparedAveiroOverlay[data.id].properties.elevation = Number(
           data.elevation
         );
@@ -229,6 +229,10 @@ class Viewer {
           updateTriggers: {
             getFillColor: updateColors,
             getElevation: updateElevation,
+          },
+          transitions: {
+            getElevation: 500,
+            getColors: 500,
           },
         }),
       ],

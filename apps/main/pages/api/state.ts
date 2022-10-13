@@ -13,6 +13,7 @@ async function handleState(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    // @ts-ignore
     res.socket.server.io.emit('set-data', req.query);
     res.status(200).json({
       test: 'test2',
