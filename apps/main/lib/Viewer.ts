@@ -129,7 +129,7 @@ class Viewer {
           lineWidthMinPixels: 1,
           getFillColor: (d: any) => d.properties.color || [160, 160, 180, 200],
           getLineColor: [80, 80, 80, 200],
-          getPointRadius: 10,
+          getPointRadius: 11,
           getLineWidth: 1,
           getElevation: 30,
         }),
