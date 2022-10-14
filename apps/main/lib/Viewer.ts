@@ -109,9 +109,9 @@ class Viewer {
         longitude: lon,
         latitude: lat,
         zoom: zoom,
-        pitch: 0,
+        pitch: 60,
         bearing: 0,
-        transitionDuration: 8000,
+        transitionDuration: 10000,
         transitionInterpolator: new FlyToInterpolator(),
       };
       this.render();

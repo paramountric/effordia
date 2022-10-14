@@ -41,12 +41,12 @@ const Viewport: React.FC<ViewportProps> = () => {
           <div className="bg-gray-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
             <h1>How does it work:</h1>
             <p>
-              1. When you press play, the map visits places (actually not atm,
-              we will see which places to go to, like some interesting places..)
+              1. The map visits places (need to change those.. ideas where to
+              go?). The story begin.
             </p>
             <p>
-              2. Send trigger messages on the map objects to change color and
-              elevation (how many meters tall the polygon will be)
+              2. You will trigger messages (see below) on the map objects (use
+              their IDs) to change color and elevation
             </p>
             <p>3. There might be some sound as well</p>
             <p>

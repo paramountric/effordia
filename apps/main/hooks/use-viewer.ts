@@ -19,19 +19,25 @@ export const useViewer = (): {
     if (viewer) {
       viewer.render();
       viewer.rotateCamera();
-      const flyTo = [[-8.65, 40.64, 14]];
+      const flyTo = [
+        [-8.65, 40.64, 18],
+        [-8.64, 40.6, 18],
+        [-8.7, 40.7, 18],
+        [-8.6, 40.65, 18],
+      ];
       let count = 0;
+      const interval = 1000 * 8;
       const intervalId = setInterval(() => {
         if (flyTo[count]) {
           const [lon, lat, zoom] = flyTo[count];
-          viewer.flyTo(lon, lat, zoom, 5000);
+          viewer.flyTo(lon, lat, zoom, interval);
           count++;
         } else {
           const [lon, lat, zoom] = startPosition;
-          viewer.flyTo(lon, lat, zoom, 5000);
+          viewer.flyTo(lon, lat, zoom, interval);
           clearInterval(intervalId);
         }
-      }, 1000);
+      }, interval + 3000);
       return () => clearInterval(intervalId);
     }
   }, [viewer]);
