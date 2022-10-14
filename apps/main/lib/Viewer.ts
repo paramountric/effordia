@@ -101,7 +101,7 @@ class Viewer {
     this.render();
   }
 
-  flyTo(lon: number, lat: number, zoom: number) {
+  flyTo(lon: number, lat: number, zoom: number, time?: number) {
     if (lon && lat && zoom) {
       console.log(lon, lat, zoom);
       this.mainViewState = {
