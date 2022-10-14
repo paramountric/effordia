@@ -9,6 +9,10 @@ const Viewport: React.FC<ViewportProps> = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const {initViewer, viewer} = useViewer();
   const [playing, setPlaying] = useState<boolean>(false);
+  const [red, setRed] = useState<number>(0);
+  const [green, setGreen] = useState<number>(255);
+  const [blue, setBlue] = useState<number>(0);
+  const [elevation, setElevation] = useState<number>(0);
   const {state: selectedFeatureId, actions} = useSelectedFeature();
 
   useEffect(() => {
@@ -23,6 +27,15 @@ const Viewport: React.FC<ViewportProps> = () => {
     if (viewer) {
       viewer.play();
     }
+  };
+
+  const generateUrl = () => {
+    return `https://mtf.pmtric.com/api/state?id=${selectedFeatureId}&red=${red}&green=${green}&blue=${blue}&elevation=${elevation}`;
+  };
+
+  const playSound = async () => {
+    const url = generateUrl();
+    const res = await fetch(url);
   };
 
   const deselect = () => {
@@ -89,6 +102,70 @@ const Viewport: React.FC<ViewportProps> = () => {
           <div className="bg-gray-900/75 text-center m-auto items-center justify-center w-96">
             <h1 className="text-xl">Selected map object ID:</h1>
             <h1 className="text-red-800">{selectedFeatureId}</h1>
+
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Red
+            </label>
+            <input
+              id="red"
+              min={0}
+              max={255}
+              value={red}
+              type="range"
+              onChange={e => {
+                setRed(Number(e.target.value));
+              }}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Green
+            </label>
+            <input
+              id="green"
+              min={0}
+              max={255}
+              type="range"
+              onChange={e => {
+                setGreen(Number(e.target.value));
+              }}
+              value={green}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Blue
+            </label>
+            <input
+              id="blue"
+              value={blue}
+              min={0}
+              max={255}
+              type="range"
+              onChange={e => {
+                setBlue(Number(e.target.value));
+              }}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Elevation
+            </label>
+            <input
+              id="elevation"
+              value={elevation}
+              min={0}
+              max={1000}
+              type="range"
+              onChange={e => {
+                setElevation(Number(e.target.value));
+              }}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            />
+
+            <button
+              onClick={playSound}
+              className="p-4 text-3xl hover:bg-gray-900"
+            >
+              Play
+            </button>
             <button
               onClick={deselect}
               className="p-4 text-3xl hover:bg-gray-900"
