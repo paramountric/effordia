@@ -9,6 +9,7 @@ import {
 import {GeoJsonLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {Feature, FeatureCollection} from 'geojson';
 import maplibreGl, {Texture} from 'maplibre-gl';
+import * as Tone from 'tone';
 import MaplibreWrapper from './MaplibreWrapper';
 import rawAveiroData from '../data/aveiro.json';
 
@@ -25,12 +26,11 @@ const ids = {
 let updateColors = Date.now();
 let updateElevation = Date.now();
 
+const startPosition = [-8.6538, 40.6405, 12];
+
 for (const feature of aveiroData.features) {
   if (feature.properties.natural === 'water') {
     feature.properties.aid = `water-${ids.water}`;
-    if (ids.water === 37) {
-      console.log(feature);
-    }
     ids.water++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.building) {
@@ -46,9 +46,6 @@ for (const feature of aveiroData.features) {
     ids.industrial++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.leisure === 'park') {
-    if (feature.properties.name === 'Largo de São Brás') {
-      console.log(feature);
-    }
     feature.properties.aid = `park-${ids.industrial}`;
     ids.park++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
@@ -58,8 +55,6 @@ for (const feature of aveiroData.features) {
     //preparedAveiroFoundation.push(feature);
   }
 }
-
-console.log(ids);
 
 type ViewerProps = DeckProps & {
   onSelectObject?: () => Feature | null;
@@ -160,6 +155,48 @@ class Viewer {
 
   play() {
     console.log('play');
+    const player = new Tone.Player('./sounds/stephan.mp3').toDestination();
+    player.loop = true;
+    player.volume.value = -16;
+    player.autostart = true;
+
+    const flyTo: any[] = [
+      [-8.8162, 40.641412, 17],
+      ['./sounds/Crabeater.mp3', 'Sea, the Crab Eater'],
+      [-8.6548073, 40.6406628, 20],
+      ['./sounds/Birdtree.mp3', 'Park, the birds tree'],
+      [-8.748, 40.6401, 18],
+      ['./sounds/mussles.mp3', 'Mussles in Barra'],
+      [-8.65534, 40.64246, 18],
+      ['./sounds/fishmarket.mp3', 'Fish market'],
+      [-8.6558, 40.6542, 18],
+      ['./sounds/saltpan.mp3', 'Salt Pan Walking'],
+    ];
+    let count = 0;
+    const interval = 1000 * 5;
+    const intervalId = setInterval(() => {
+      if (flyTo[count]) {
+        if (typeof flyTo[count][0] === 'string') {
+          this.rotateCamera();
+          const player = new Tone.Player(flyTo[count][0]).toDestination();
+          Tone.loaded().then(() => {
+            player.fadeIn = 2;
+            player.fadeOut = 3;
+            player.start().stop('+10');
+          });
+        } else {
+          const [lon, lat, zoom] = flyTo[count];
+          this.flyTo(lon, lat, zoom, interval);
+        }
+        count++;
+      } else {
+        const [lon, lat, zoom] = startPosition;
+        this.flyTo(lon, lat, zoom, interval);
+        this.rotateCamera();
+        clearInterval(intervalId);
+      }
+    }, interval + 3000);
+    return () => clearInterval(intervalId);
   }
 
   setData(data: any) {

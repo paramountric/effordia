@@ -10,6 +10,7 @@ type Device = {
 const PlayPage: NextPage = () => {
   const [midi, setMidi] = useState<Midi | null>(null);
   const [deviceList, setDeviceList] = useState<Device[] | null>(null);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<number | null>(null);
 
   const selectDevice = (deviceId: number) => {
     midi.connect(deviceId);
