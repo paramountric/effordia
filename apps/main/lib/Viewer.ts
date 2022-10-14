@@ -1,4 +1,11 @@
-import {Deck, DeckProps, MapViewState, MapView} from '@deck.gl/core';
+import {
+  Deck,
+  DeckProps,
+  MapViewState,
+  MapView,
+  LinearInterpolator,
+  FlyToInterpolator,
+} from '@deck.gl/core';
 import {GeoJsonLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {Feature, FeatureCollection} from 'geojson';
 import maplibreGl, {Texture} from 'maplibre-gl';
@@ -41,6 +48,10 @@ for (const feature of aveiroData.features) {
   }
 }
 
+type ViewerProps = DeckProps & {
+  onSelectObject?: () => Feature | null;
+};
+
 const internalProps = {
   debug: false,
   glOptions: {
@@ -50,21 +61,61 @@ const internalProps = {
   layers: [],
 };
 
-type ViewerProps = DeckProps & {
-  onSelectObject?: () => Feature | null;
+const defaultViewState = {
+  longitude: -8.6538,
+  latitude: 40.6405,
+  zoom: 12,
+  target: [0, 0, 0],
+  pitch: 60,
+  bearing: 0,
+  maxZoom: 16,
+  minZoom: 8,
 };
+
+const transitionInterpolator = new LinearInterpolator(['bearing']);
 
 class Viewer {
   gl: WebGL2RenderingContext | null = null;
   deck: Deck;
+  mainViewState: MapViewState;
   maplibreMap?: maplibregl.Map;
   selectedObject: Feature | null = null;
   props: ViewerProps;
   constructor(props: ViewerProps, maplibreOptions?: maplibregl.MapOptions) {
     const resolvedProps = Object.assign({}, internalProps, props);
     this.props = resolvedProps;
+    this.mainViewState = defaultViewState;
 
-    this.maplibre(Object.assign({}, resolvedProps, maplibreOptions));
+    //this.maplibre(Object.assign({}, resolvedProps, maplibreOptions));
+    this.deck = new Deck(resolvedProps);
+  }
+
+  rotateCamera() {
+    this.mainViewState = {
+      ...this.mainViewState,
+      bearing: this.mainViewState.bearing + 120,
+      transitionDuration: 1000 * 60,
+      transitionInterpolator,
+      onTransitionEnd: this.rotateCamera.bind(this),
+    };
+    this.render();
+  }
+
+  flyTo(lon: number, lat: number, zoom: number) {
+    if (lon && lat && zoom) {
+      console.log(lon, lat, zoom);
+      this.mainViewState = {
+        ...this.mainViewState,
+        longitude: lon,
+        latitude: lat,
+        zoom: zoom,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 8000,
+        transitionInterpolator: new FlyToInterpolator(),
+      };
+      this.render();
+    }
   }
 
   onWebGLInitialized(gl: any) {
@@ -142,38 +193,34 @@ class Viewer {
       return;
     }
     this.deck.setProps({
-      // parameters: {
-      //   clearColor: [250, 250, 250, 1],
-      // },
-      // useDevicePixels: true,
-      // views: [
-      //   new MapView({
-      //     id: 'main',
-      //     controller: true,
-      //     longitude: 8.6538,
-      //     latitude: 40.6405,
-      //     width: window.innerWidth,
-      //     height: window.innerHeight,
-      //   }),
-      // ],
-      // viewState: {
-      //   main: {
-      //     longitude: 8.6538,
-      //     latitude: 40.6405,
-      //   },
-      // },
-      // layerFilter: ({layer, viewport}) => {
-      //   return true;
-      // },
-      // onViewStateChange: ({
-      //   viewState,
-      //   viewId,
-      //   interactionState,
-      //   oldViewState,
-      // }) => {
-      //   console.log(viewState);
-      //   return viewState;
-      // },
+      parameters: {
+        clearColor: [0, 0, 0, 255],
+      },
+      useDevicePixels: true,
+      views: [
+        new MapView({
+          id: 'main',
+          controller: true,
+        }),
+      ],
+      viewState: {
+        main: this.mainViewState,
+      },
+      layerFilter: ({layer, viewport}) => {
+        return true;
+      },
+      onViewStateChange: ({
+        viewState,
+        viewId,
+        interactionState,
+        oldViewState,
+      }) => {
+        if (viewId === 'main') {
+          this.mainViewState = viewState;
+          this.render();
+        }
+        return viewState;
+      },
       layers: [
         // new ScatterplotLayer({
         //   id: 'background-circle',
