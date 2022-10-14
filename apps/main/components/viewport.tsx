@@ -1,4 +1,5 @@
 import {useRef, useState, useEffect} from 'react';
+import * as Tone from 'tone';
 import {useViewer} from '../hooks/use-viewer';
 import {useSelectedFeature} from '../hooks/selected-feature';
 
@@ -16,8 +17,9 @@ const Viewport: React.FC<ViewportProps> = () => {
     }
   }, [initViewer]);
 
-  const play = () => {
+  const play = async () => {
     setPlaying(true);
+    await Tone.start();
     if (viewer) {
       viewer.play();
     }
@@ -46,7 +48,8 @@ const Viewport: React.FC<ViewportProps> = () => {
             </p>
             <p>
               2. You will trigger messages (see below) on the map objects (use
-              their IDs) to change color and elevation
+              their IDs) to change color and elevation (HINT: you will use
+              ANOTHER device/script to trigger the messages..)
             </p>
             <p>3. There might be some sound as well</p>
             <p>

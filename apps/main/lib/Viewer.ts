@@ -48,6 +48,8 @@ for (const feature of aveiroData.features) {
   }
 }
 
+console.log(ids);
+
 type ViewerProps = DeckProps & {
   onSelectObject?: () => Feature | null;
 };
@@ -73,6 +75,22 @@ const defaultViewState = {
 };
 
 const transitionInterpolator = new LinearInterpolator(['bearing']);
+
+const palette = [
+  [255, 223, 0, 117], // yellow
+  [241, 181, 11, 117], // yellow orange
+  [241, 135, 29, 117], // orange
+  [241, 97, 33, 117], // orange red
+  [241, 39, 39, 117], // red
+  [200, 2, 134, 117], // red purple
+  [109, 36, 139, 117], // purple
+  [68, 54, 162, 117], // purple blue
+  [18, 120, 196, 117], // blue
+  [0, 168, 196, 117], // blue green
+  [0, 142, 91, 117], // green
+  [139, 186, 37, 117], // green yellow
+];
+let paletteBump = 0;
 
 class Viewer {
   gl: WebGL2RenderingContext | null = null;
@@ -178,6 +196,23 @@ class Viewer {
       if (doRender) {
         this.render();
       }
+    } else if (data.rainbow) {
+      // console.log('rainbow');
+      // setInterval(() => {
+      for (let i = 0; i < 799; i++) {
+        const color = preparedAveiroOverlay[`water-${i + 1}`].properties
+          .color || [255, 255, 255, 150];
+        color[0] = palette[(i + paletteBump) % (palette.length - 1)][0];
+        color[1] = palette[(i + paletteBump) % (palette.length - 1)][1];
+        color[2] = palette[(i + paletteBump) % (palette.length - 1)][2];
+        color[3] = palette[(i + paletteBump) % (palette.length - 1)][3];
+        preparedAveiroOverlay[`water-${i + 1}`].properties.elevation =
+          Math.ceil(Math.random() * 100);
+        preparedAveiroOverlay[`water-${i + 1}`].properties.color = color;
+        this.render();
+      }
+      paletteBump++;
+      //}, 3000);
     } else {
       console.log('not found', data);
     }

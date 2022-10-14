@@ -2,6 +2,7 @@ import {useState, useEffect, useCallback} from 'react';
 import {Viewer} from '../lib/Viewer';
 import {io} from 'socket.io-client';
 import {useSelectedFeature} from '../hooks/selected-feature';
+import * as Tone from 'tone';
 
 let socket;
 
