@@ -20,18 +20,33 @@ export const useViewer = (): {
     if (viewer) {
       viewer.render();
       viewer.rotateCamera();
-      const flyTo = [
-        [-8.65, 40.64, 18],
+      const flyTo: any[] = [
+        [-8.7273651, 40.641412, 18],
+        ['./sounds/Crabeater.mp3'],
+        [-8.6548073, 40.6406628, 18],
+        ['./sounds/Birdtree.mp3'],
         [-8.64, 40.6, 18],
-        [-8.7, 40.7, 18],
+        //['url'],
+        [-8.65, 40.64, 18],
+        //['url'],
         [-8.6, 40.65, 18],
       ];
       let count = 0;
-      const interval = 1000 * 8;
+      const interval = 1000 * 5;
       const intervalId = setInterval(() => {
         if (flyTo[count]) {
-          const [lon, lat, zoom] = flyTo[count];
-          viewer.flyTo(lon, lat, zoom, interval);
+          if (typeof flyTo[count][0] === 'string') {
+            viewer.rotateCamera();
+            const player = new Tone.Player(flyTo[count][0]).toDestination();
+            Tone.loaded().then(() => {
+              player.fadeIn = 2;
+              player.fadeOut = 3;
+              player.start().stop('+10');
+            });
+          } else {
+            const [lon, lat, zoom] = flyTo[count];
+            viewer.flyTo(lon, lat, zoom, interval);
+          }
           count++;
         } else {
           const [lon, lat, zoom] = startPosition;
@@ -58,6 +73,12 @@ export const useViewer = (): {
           console.log('update');
           if (viewer) {
             viewer.setData(msg);
+            const player = new Tone.Player(
+              'https://tonejs.github.io/audio/berklee/gong_1.mp3'
+            ).toDestination();
+            Tone.loaded().then(() => {
+              player.start();
+            });
           }
         });
       };

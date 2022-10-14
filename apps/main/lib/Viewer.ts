@@ -20,6 +20,7 @@ const ids = {
   building: 1,
   farmland: 1,
   industrial: 1,
+  park: 1,
 };
 let updateColors = Date.now();
 let updateElevation = Date.now();
@@ -27,6 +28,9 @@ let updateElevation = Date.now();
 for (const feature of aveiroData.features) {
   if (feature.properties.natural === 'water') {
     feature.properties.aid = `water-${ids.water}`;
+    if (ids.water === 37) {
+      console.log(feature);
+    }
     ids.water++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.building) {
@@ -40,6 +44,13 @@ for (const feature of aveiroData.features) {
   } else if (feature.properties.landuse === 'industrial') {
     feature.properties.aid = `industrial-${ids.industrial}`;
     ids.industrial++;
+    preparedAveiroOverlay[feature.properties.aid] = feature;
+  } else if (feature.properties.leisure === 'park') {
+    if (feature.properties.name === 'Largo de São Brás') {
+      console.log(feature);
+    }
+    feature.properties.aid = `park-${ids.industrial}`;
+    ids.park++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
   } else if (feature.properties.type === 'boundary') {
     preparedAveiroFoundation.push(feature);
