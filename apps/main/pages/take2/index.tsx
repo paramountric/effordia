@@ -54,7 +54,10 @@ const Take2: React.FC<any> = () => {
             </Link>
           </div>
           <div className="bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-1/2">
-            <p className="p-2">This video (by Ravi)</p>
+            <p className="p-2">
+              Mapping ecosystems at all scales. Video by: Ravi Kapur, with
+              footage by Nuno Barbosa
+            </p>
           </div>
           <div className="flex justify-center">
             <video controls muted className="w-1/2 mb-4">
