@@ -24,7 +24,7 @@ const Take2: React.FC<any> = () => {
                 onInit={typewriter => {
                   typewriter
                     .typeString(
-                      'Aveiro Map. Second take. Click the objects in the map -> adjust color and elevation setings -> press play button'
+                      'Aveiro Map. Second take. Click the objects in the map -> adjust color and elevation settings -> press play button'
                     )
                     .start();
                 }}
