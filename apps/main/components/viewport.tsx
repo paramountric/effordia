@@ -8,12 +8,11 @@ type ViewportProps = {};
 
 const Viewport: React.FC<ViewportProps> = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const {initViewer, viewer} = useViewer();
+  const {initViewer, viewer, infoText} = useViewer();
   const [playing, setPlaying] = useState<boolean>(false);
   const [red, setRed] = useState<number>(0);
   const [green, setGreen] = useState<number>(255);
   const [blue, setBlue] = useState<number>(0);
-  const [playIntro, setPlayIntro] = useState<boolean>(false);
   const [elevation, setElevation] = useState<number>(0);
   const {state: selectedFeatureId, actions} = useSelectedFeature();
 
@@ -22,6 +21,10 @@ const Viewport: React.FC<ViewportProps> = () => {
       initViewer(canvasRef.current);
     }
   }, [initViewer]);
+
+  useEffect(() => {
+    console.log(infoText);
+  }, [infoText]);
 
   const play = async () => {
     setPlaying(true);
@@ -51,7 +54,7 @@ const Viewport: React.FC<ViewportProps> = () => {
   return (
     <div className="relative w-screen h-screen">
       {!playing && (
-        <div className="z-50 bg-black absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
+        <div className="z-50 absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
           <div className="5 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-full">
             <h1 className="text-xl p-2 bg-gray-900/75">
               <Typewriter
@@ -92,6 +95,7 @@ const Viewport: React.FC<ViewportProps> = () => {
             <p>
               Video clip: Nuno Barbosa, also thanks to Ravi Kapur for the idea
             </p>
+            <p>Rainbow easter egg: Terhi</p>
             <p>Map programming: Andreas</p>
             <p>
               It started with the beautiful OpenStreetMap data - thanks Michela

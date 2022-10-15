@@ -5,9 +5,9 @@ export class Midi {
   midiInIndex: number;
   midi: any;
   midiIn: any;
-  red: 0;
-  blue: 0;
-  green: 0;
+  red: number;
+  blue: number;
+  green: number;
   success(midi) {
     this.midi = midi;
   }
@@ -20,9 +20,12 @@ export class Midi {
     console.log('MIDI not supported :(');
   }
   generateUrl(id = 'building-1') {
-    const red = this.red * 2;
-    const blue = this.blue * 2;
-    const green = this.green * 2;
+    // const red = Math.max(255, this.red * 2);
+    // const blue = Math.max(255, this.blue * 2);
+    // const green = Math.max(255, this.green * 2);
+    const green = this.green;
+    const blue = this.blue;
+    const red = this.red;
     const elevation = 100000;
     const baseUrl =
       process.env.NODE_ENV === 'production'
@@ -59,20 +62,48 @@ export class Midi {
     const [signal, id, slider] = midiMsg.data;
 
     console.log(signal, id, slider);
+    let objId = 'building-1';
+
     switch (id) {
       case 6:
-        this.red = slider;
+        //this.red = slider;
         break;
       case 5:
-        this.green = slider;
+        //this.green = slider;
         break;
       case 4:
-        this.blue = slider;
+        //this.blue = slider;
+        break;
+      case 28:
+        objId = `building-1817`;
+        this.red = 0;
+        this.green = 255;
+        this.blue = 0;
+        break;
+      case 29:
+        objId = `building-1412`;
+        this.red = 255;
+        this.green = 0;
+        this.blue = 0;
+        break;
+      case 30:
+        objId = `building-1458`;
+        this.red = 0;
+        this.green = 255;
+        this.blue = 255;
+        break;
+      case 31:
+        objId = `water-442`;
+        this.red = 0;
+        this.green = 0;
+        this.blue = 255;
         break;
       default:
-        this.red = slider;
+        this.red = 0;
+        this.green = 255;
+        this.blue = 0;
     }
-    const objId = `building-${midiMsg.data[1] || 0}`;
+
     if (signal === 145) {
       this.playSound(objId);
     }

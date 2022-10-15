@@ -36,7 +36,7 @@ const Take2: React.FC<any> = () => {
                 onInit={typewriter => {
                   typewriter
                     .typeString(
-                      '(this time you also play if you want at mtf.pmtric.com RAISE YOUR VOLUME!)'
+                      '(this time you play -> at mtf.pmtric.com RAISE YOUR VOLUME PLEASE!)'
                     )
                     .start();
                 }}
@@ -58,6 +58,9 @@ const Take2: React.FC<any> = () => {
               <source src="/video/salt-pans.mp4" type="video/mp4" />
               Sorry, your browser doesnt support videos.
             </video>
+          </div>
+          <div className="absolute bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-full">
+            <p className="p-2">This video (by Ravi)</p>
           </div>
         </div>
       ) : (

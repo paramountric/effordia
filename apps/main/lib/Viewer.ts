@@ -78,8 +78,8 @@ const defaultViewState = {
   target: [0, 0, 0],
   pitch: 60,
   bearing: 0,
-  maxZoom: 16,
-  minZoom: 8,
+  maxZoom: 24,
+  minZoom: 4,
 };
 
 const transitionInterpolator = new LinearInterpolator(['bearing', 'pitch']);
@@ -163,7 +163,7 @@ class Viewer {
     player.autostart = true;
 
     const flyTo: any[] = [
-      [-8.8162, 40.641412, 17],
+      [-8.8162, 40.641412, 15],
       ['./sounds/Crabeater.mp3', 'Sea, the Crab Eater'],
       [-8.6548073, 40.6406628, 20],
       ['./sounds/Birdtree.mp3', 'Park, the birds tree'],
@@ -183,7 +183,6 @@ class Viewer {
         if (typeof flyTo[count][0] === 'string') {
           const str = flyTo[count][0] as string;
           if (str === 'salt-pan-video') {
-            console.log('set video');
             this.flyTo(-8.6558, 40.6542, 0, 0);
           } else {
             this.rotateCamera();
