@@ -43,7 +43,7 @@ const Take2: React.FC<any> = () => {
               />
             </h1>
           </div>
-          <div className="bg-teal-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
+          <div className="bg-teal-900/75 p-4 mb-4 space-y-4 text-center m-auto items-center justify-center w-96">
             <Link href="/">
               <button
                 onClick={goToStart}
@@ -53,14 +53,14 @@ const Take2: React.FC<any> = () => {
               </button>
             </Link>
           </div>
+          <div className="bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-1/2">
+            <p className="p-2">This video (by Ravi)</p>
+          </div>
           <div className="flex justify-center">
-            <video className="w-1/2 mb-4">
+            <video controls muted className="w-1/2 mb-4">
               <source src="/video/salt-pans.mp4" type="video/mp4" />
               Sorry, your browser doesnt support videos.
             </video>
-          </div>
-          <div className="absolute bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-full">
-            <p className="p-2">This video (by Ravi)</p>
           </div>
         </div>
       ) : (
