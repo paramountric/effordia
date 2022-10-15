@@ -89,7 +89,7 @@ const Viewport: React.FC<ViewportProps> = () => {
             <p>Value chain inspiration: Monica</p>
             <p>Sound programming: Ápisov</p>
             <p>MIDI connection help: JP</p>
-            <p>Video clip: Nuno, also thanks to Javi for the idea</p>
+            <p>Video clip: Nuno, also thanks to Ravi for the idea</p>
             <p>Map programming: Andreas</p>
           </div>
           <div className="absolute bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-full">
