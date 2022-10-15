@@ -6,7 +6,7 @@ import {
   LinearInterpolator,
   FlyToInterpolator,
 } from '@deck.gl/core';
-import {GeoJsonLayer, ScatterplotLayer} from '@deck.gl/layers';
+import {GeoJsonLayer, ScatterplotLayer, BitmapLayer} from '@deck.gl/layers';
 import {Feature, FeatureCollection} from 'geojson';
 import maplibreGl, {Texture} from 'maplibre-gl';
 import * as Tone from 'tone';
@@ -29,7 +29,9 @@ let updateElevation = Date.now();
 const startPosition = [-8.6538, 40.6405, 12];
 
 for (const feature of aveiroData.features) {
-  if (feature.properties.natural === 'water') {
+  if (feature.geometry.type === 'Point') {
+    // filter out points
+  } else if (feature.properties.natural === 'water') {
     feature.properties.aid = `water-${ids.water}`;
     ids.water++;
     preparedAveiroOverlay[feature.properties.aid] = feature;
@@ -80,7 +82,7 @@ const defaultViewState = {
   minZoom: 8,
 };
 
-const transitionInterpolator = new LinearInterpolator(['bearing']);
+const transitionInterpolator = new LinearInterpolator(['bearing', 'pitch']);
 
 const palette = [
   [255, 223, 0, 117], // yellow
@@ -125,7 +127,7 @@ class Viewer {
     this.render();
   }
 
-  flyTo(lon: number, lat: number, zoom: number, time?: number) {
+  flyTo(lon: number, lat: number, zoom: number, pitch?: number) {
     if (lon && lat && zoom) {
       console.log(lon, lat, zoom);
       this.mainViewState = {
@@ -133,7 +135,7 @@ class Viewer {
         longitude: lon,
         latitude: lat,
         zoom: zoom,
-        pitch: 60,
+        pitch: pitch || pitch === 0 ? pitch : 0,
         bearing: 0,
         transitionDuration: 10000,
         transitionInterpolator: new FlyToInterpolator(),
@@ -171,28 +173,35 @@ class Viewer {
       ['./sounds/fishmarket.mp3', 'Fish market'],
       [-8.6558, 40.6542, 18],
       ['./sounds/saltpan.mp3', 'Salt Pan Walking'],
+      [-8.6558, 40.6542, 24],
+      ['salt-pan-video'],
     ];
     let count = 0;
     const interval = 1000 * 5;
     const intervalId = setInterval(() => {
       if (flyTo[count]) {
         if (typeof flyTo[count][0] === 'string') {
-          this.rotateCamera();
-          const player = new Tone.Player(flyTo[count][0]).toDestination();
-          Tone.loaded().then(() => {
-            player.fadeIn = 2;
-            player.fadeOut = 3;
-            player.start().stop('+10');
-          });
+          const str = flyTo[count][0] as string;
+          if (str === 'salt-pan-video') {
+            console.log('set video');
+            this.flyTo(-8.6558, 40.6542, 0, 0);
+          } else {
+            this.rotateCamera();
+            const player = new Tone.Player(flyTo[count][0]).toDestination();
+            Tone.loaded().then(() => {
+              player.fadeIn = 2;
+              player.fadeOut = 3;
+              player.start().stop('+10');
+            });
+          }
         } else {
           const [lon, lat, zoom] = flyTo[count];
-          this.flyTo(lon, lat, zoom, interval);
+          this.flyTo(lon, lat, zoom);
         }
         count++;
       } else {
         const [lon, lat, zoom] = startPosition;
-        this.flyTo(lon, lat, zoom, interval);
-        this.rotateCamera();
+        this.flyTo(lon, lat, zoom);
         clearInterval(intervalId);
       }
     }, interval + 3000);
@@ -324,7 +333,7 @@ class Viewer {
         new GeoJsonLayer({
           id: 'foundation',
           data: preparedAveiroFoundation,
-          pickable: true,
+          pickable: false,
           stroked: true,
           filled: false,
           extruded: false,
@@ -348,7 +357,7 @@ class Viewer {
             }
           },
           pickable: true,
-          stroked: true,
+          stroked: false,
           filled: true,
           extruded: true,
           pointType: 'circle',
@@ -363,10 +372,11 @@ class Viewer {
             getFillColor: updateColors,
             getElevation: updateElevation,
           },
-          transitions: {
-            getElevation: 500,
-            getColors: 500,
-          },
+          // transitions affects performance too much
+          // transitions: {
+          //   getElevation: 500,
+          //   getFillColor: 500
+          // },
         }),
       ],
     });

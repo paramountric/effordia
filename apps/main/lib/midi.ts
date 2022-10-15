@@ -5,6 +5,9 @@ export class Midi {
   midiInIndex: number;
   midi: any;
   midiIn: any;
+  red: 0;
+  blue: 0;
+  green: 0;
   success(midi) {
     this.midi = midi;
   }
@@ -15,6 +18,22 @@ export class Midi {
   }
   failure() {
     console.log('MIDI not supported :(');
+  }
+  generateUrl(id = 'building-1') {
+    const red = this.red * 2;
+    const blue = this.blue * 2;
+    const green = this.green * 2;
+    const elevation = 100000;
+    const baseUrl =
+      process.env.NODE_ENV === 'production'
+        ? 'https://mtf.pmtric.com'
+        : 'http://localhost:3000';
+    return `${baseUrl}/api/state?id=${id}&red=${red}&green=${green}&blue=${blue}&elevation=${elevation}`;
+  }
+
+  async playSound(id) {
+    const url = this.generateUrl(id);
+    const res = await fetch(url);
   }
   async getInDeviceList() {
     if (!this.midi) {
@@ -37,36 +56,25 @@ export class Midi {
     return inList;
   }
   processMidiIn(midiMsg) {
-    //console.log(midiMsg);
-    // altStartMessage: used to sync when playback has already started
-    // in clock source device
-    // 0xB0 & 0x07 = CC, channel 8.
-    // Responding to altStartMessage regardless of channels
-    if (midiMsg.data[0] == 191) {
-      //CC, right channel
-      console.log('CC\t' + midiMsg.data[1] + '\tvalue:' + midiMsg.data[2]);
-    } else if (midiMsg.data[0] == 144) {
-      console.log(
-        'Note ON\t' + midiMsg.data[1] + '\tvelocity: ' + midiMsg.data[2]
-      );
-    } else if (midiMsg.data[0] == 128) {
-      console.log(
-        'Note OFF\t' + midiMsg.data[1] + '\tvelocity: ' + midiMsg.data[2]
-      );
-    } else {
-      console.log(midiMsg.data);
+    const [signal, id, slider] = midiMsg.data;
+
+    console.log(signal, id, slider);
+    switch (id) {
+      case 6:
+        this.red = slider;
+        break;
+      case 5:
+        this.green = slider;
+        break;
+      case 4:
+        this.blue = slider;
+        break;
+      default:
+        this.red = slider;
     }
-    // send to get api
+    const objId = `building-${midiMsg.data[1] || 0}`;
+    if (signal === 145) {
+      this.playSound(objId);
+    }
   }
 }
-
-// function calculateTempo(time) {
-//   let tempoElem = document.getElementById('ext-tempo');
-//   let tempo = Math.round(60000 / (time * 4));
-//   tempoElem.innerText = tempo;
-// }
-
-// function MIDIplayNote(note, vel, out) {
-//   out.send([NOTE_ON, note, vel]);
-//   setTimeout(out.send([NOTE_OFF, note, 0x00]), NOTE_DURATION);
-// }

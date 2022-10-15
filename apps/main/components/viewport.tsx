@@ -84,13 +84,20 @@ const Viewport: React.FC<ViewportProps> = () => {
             </button>
           </div>
           <div className="bg-gray-900/75 mt-12 text-teal-400 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
-            <p>Mixolydian theme: Tim</p>
+            <p>Mixolydian theme: Tim Canfer</p>
             <p>Environment sounds: Jung In, Geirant, Terhi</p>
             <p>Value chain inspiration: Monica</p>
             <p>Sound programming: Ápisov</p>
             <p>MIDI connection help: JP</p>
-            <p>Video clip: Nuno, also thanks to Ravi for the idea</p>
+            <p>
+              Video clip: Nuno Barbosa, also thanks to Ravi Kapur for the idea
+            </p>
             <p>Map programming: Andreas</p>
+            <p>
+              It started with the beautiful OpenStreetMap data - thanks Michela
+              for highlighting that
+            </p>
+            <p>Thanks to all people who contributed with ideas and feedback!</p>
           </div>
           <div className="absolute bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-full">
             <p className="p-2">Data: OpenStreetMap</p>
@@ -98,8 +105,8 @@ const Viewport: React.FC<ViewportProps> = () => {
         </div>
       )}
       {selectedFeatureId && (
-        <div className="z-50 absolute top-4 right-4 border border-white text-white">
-          <div className="bg-gray-900/75 text-center m-auto items-center justify-center w-96">
+        <div className="z-50 m-2 absolute top-4 right-4 border border-white text-white">
+          <div className="bg-gray-900/75 p-4 text-center m-auto items-center justify-center w-96">
             <h1 className="text-xl">Selected map object ID:</h1>
             <h1 className="text-red-800">{selectedFeatureId}</h1>
 
