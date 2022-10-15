@@ -36,7 +36,7 @@ const Take1: React.FC<any> = () => {
                 onInit={typewriter => {
                   typewriter
                     .typeString(
-                      '(next time you also play at mtf.pmtric.com, ok?)'
+                      '(next time you also play at mtf.pmtric.com - ok?)'
                     )
                     .start();
                 }}
