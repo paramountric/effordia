@@ -51,7 +51,7 @@ const Viewport: React.FC<ViewportProps> = () => {
   return (
     <div className="relative w-screen h-screen">
       {!playing && (
-        <div className="z-50 absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
+        <div className="z-50 bg-black absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
           <div className="5 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-full">
             <h1 className="text-xl p-2 bg-gray-900/75">
               <Typewriter
