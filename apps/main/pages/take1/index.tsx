@@ -24,7 +24,7 @@ const Take1: React.FC<any> = () => {
                 onInit={typewriter => {
                   typewriter
                     .typeString(
-                      'Aveiro Map. First take. Introducing the map. Without interactive signals'
+                      'Aveiro Map. First take. Introducing the map. Without interactive signals from the audience'
                     )
                     .start();
                 }}
