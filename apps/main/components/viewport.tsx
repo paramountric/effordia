@@ -8,7 +8,7 @@ type ViewportProps = {};
 
 const Viewport: React.FC<ViewportProps> = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const {initViewer, viewer, infoText} = useViewer();
+  const {initViewer, viewer} = useViewer();
   const [playing, setPlaying] = useState<boolean>(false);
   const [red, setRed] = useState<number>(0);
   const [green, setGreen] = useState<number>(255);
@@ -21,10 +21,6 @@ const Viewport: React.FC<ViewportProps> = () => {
       initViewer(canvasRef.current);
     }
   }, [initViewer]);
-
-  useEffect(() => {
-    console.log(infoText);
-  }, [infoText]);
 
   const play = async () => {
     setPlaying(true);
@@ -92,9 +88,7 @@ const Viewport: React.FC<ViewportProps> = () => {
             <p>Value chain inspiration: Monica</p>
             <p>Sound programming: Ápisov</p>
             <p>MIDI connection help: JP</p>
-            <p>
-              Video clip: Nuno Barbosa, also thanks to Ravi Kapur for the idea
-            </p>
+            <p>Video clip: Ravi Kapur, with footage by Nuno Barbosa</p>
             <p>Rainbow easter egg: Terhi</p>
             <p>Map programming: Andreas</p>
             <p>
