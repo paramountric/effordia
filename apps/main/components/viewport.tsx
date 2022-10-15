@@ -1,5 +1,6 @@
 import {useRef, useState, useEffect} from 'react';
 import * as Tone from 'tone';
+import Typewriter from 'typewriter-effect';
 import {useViewer} from '../hooks/use-viewer';
 import {useSelectedFeature} from '../hooks/selected-feature';
 
@@ -12,6 +13,7 @@ const Viewport: React.FC<ViewportProps> = () => {
   const [red, setRed] = useState<number>(0);
   const [green, setGreen] = useState<number>(255);
   const [blue, setBlue] = useState<number>(0);
+  const [playIntro, setPlayIntro] = useState<boolean>(false);
   const [elevation, setElevation] = useState<number>(0);
   const {state: selectedFeatureId, actions} = useSelectedFeature();
 
@@ -46,53 +48,35 @@ const Viewport: React.FC<ViewportProps> = () => {
     <div className="relative w-screen h-screen">
       {!playing && (
         <div className="z-50 absolute top-0 left-0 w-full h-full rounded-full border border-white text-white">
-          <div className="bg-gray-900/75 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-96">
-            <h1 className="text-xl">Aveiro - play a value supply chain.</h1>
-            <h1>
-              Water. Fish. Salt. Market. People. Materials. Innovation.
-              Circularity. Ecosystem living
+          <div className="5 p-4 mb-10 mt-4 text-center m-auto items-center justify-center w-full">
+            <h1 className="text-xl p-2 bg-gray-900/75">
+              <Typewriter
+                options={{deleteSpeed: 10, delay: 10}}
+                onInit={typewriter => {
+                  typewriter
+                    .typeString(
+                      'Aveiro. Map. Water. Fish. Salt. Mussels. Market. Bird tree. People. Innovation. Circularity. Ecosystem living.'
+                    )
+                    .start();
+                }}
+              />
+            </h1>
+            <h1 className="text-md p-2 mt-6 bg-gray-900/75">
+              <Typewriter
+                options={{deleteSpeed: 10, delay: 10}}
+                onInit={typewriter => {
+                  typewriter
+                    .typeString(
+                      'Click object on map -> Set color and elevation settings for that object -> Press play'
+                    )
+                    .start();
+                }}
+              />
             </h1>
           </div>
           <div className="bg-gray-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
-            <h1>How does it work:</h1>
-            <p>
-              1. The map visits places (need to change those.. ideas where to
-              go?). The story begin.
-            </p>
-            <p>
-              2. You will trigger messages (see below) on the map objects (use
-              their IDs) to change color and elevation (HINT: you will use
-              ANOTHER device/script to trigger the messages..)
-            </p>
-            <p>3. There might be some sound as well</p>
-            <p>
-              4. Send messages like this from your environment using REST API
-              calls:
-              <br />
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-500"
-                href="https://mtf.pmtric.com/api/state?id=water-2&red=255&elevation=10"
-              >
-                https://mtf.pmtric.com/api/state?id=water-2&red=255&elevation=10
-              </a>
-            </p>
-            <p>
-              5. This is an example using all color channels:
-              <br />
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-500"
-                href="https://mtf.pmtric.com/api/state?id=water-2&red=255&green=100&blue=100"
-              >
-                https://mtf.pmtric.com/api/state?id=water-2&red=255&green=100&blue=100
-              </a>
-            </p>
-            <p>6. Find the id of a map object by clicking it</p>
-            <button onClick={play} className="p-4 text-7xl hover:bg-gray-900">
-              PLAY
+            <button onClick={play} className="p-4 text-5xl hover:bg-gray-900">
+              START
             </button>
           </div>
         </div>
