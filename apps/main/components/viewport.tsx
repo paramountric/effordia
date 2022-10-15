@@ -85,7 +85,7 @@ const Viewport: React.FC<ViewportProps> = () => {
           </div>
           <div className="bg-gray-900/75 mt-12 text-teal-400 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
             <p>Mixolydian theme: Tim Canfer</p>
-            <p>Environment sounds: Jung In, Geirant, Terhi</p>
+            <p>Environment sounds: Jung In, Geraint (AWI, HIFMB), Terhi</p>
             <p>Value chain inspiration: Monica</p>
             <p>Sound programming: Ápisov</p>
             <p>MIDI connection help: JP</p>
