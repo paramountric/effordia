@@ -32,7 +32,11 @@ const Viewport: React.FC<ViewportProps> = () => {
   };
 
   const generateUrl = () => {
-    return `https://mtf.pmtric.com/api/state?id=${selectedFeatureId}&red=${red}&green=${green}&blue=${blue}&elevation=${elevation}`;
+    const baseUrl =
+      process.env.NODE_ENV === 'production'
+        ? 'https://mtf.pmtric.com'
+        : 'http://localhost:3000';
+    return `${baseUrl}/api/state?id=${selectedFeatureId}&red=${red}&green=${green}&blue=${blue}&elevation=${elevation}`;
   };
 
   const playSound = async () => {
@@ -67,17 +71,29 @@ const Viewport: React.FC<ViewportProps> = () => {
                 onInit={typewriter => {
                   typewriter
                     .typeString(
-                      'Click object on map -> Set color and elevation settings for that object -> Press play'
+                      'mtf.pmtric.com -> START -> Click object on map -> Set color and elevation settings for that object -> Press play'
                     )
                     .start();
                 }}
               />
             </h1>
           </div>
-          <div className="bg-gray-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
+          <div className="bg-teal-900/75 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
             <button onClick={play} className="p-4 text-5xl hover:bg-gray-900">
               START
             </button>
+          </div>
+          <div className="bg-gray-900/75 mt-12 text-teal-400 p-4 space-y-4 text-center m-auto items-center justify-center w-96">
+            <p>Mixolydian theme: Tim</p>
+            <p>Environment sounds: Jung In, Geirant, Terhi</p>
+            <p>Value chain inspiration: Monica</p>
+            <p>Sound programming: Ápisov</p>
+            <p>MIDI connection help: JP</p>
+            <p>Video clip: Nuno, also thanks to Javi for the idea</p>
+            <p>Map programming: Andreas</p>
+          </div>
+          <div className="absolute bg-gray-600/75 bottom-0 text-center m-auto items-center justify-center w-full">
+            <p className="p-2">Data: OpenStreetMap</p>
           </div>
         </div>
       )}
