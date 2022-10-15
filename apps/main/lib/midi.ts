@@ -93,7 +93,7 @@ export class Midi {
         this.blue = 255;
         break;
       case 31:
-        objId = `water-442`;
+        objId = `water-131`;
         this.red = 0;
         this.green = 0;
         this.blue = 255;
